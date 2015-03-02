@@ -34,7 +34,9 @@ include Makefile
 OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
-OBJECTFILES=
+OBJECTFILES= \
+	${OBJECTDIR}/src/book/book.o \
+	${OBJECTDIR}/src/util/price.o
 
 
 # C Compiler Flags
@@ -62,6 +64,16 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libmartket_data_lib.a: ${OBJECTFILES}
 	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libmartket_data_lib.a
 	${AR} -rv ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libmartket_data_lib.a ${OBJECTFILES} 
 	$(RANLIB) ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libmartket_data_lib.a
+
+${OBJECTDIR}/src/book/book.o: src/book/book.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/book
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/book/book.o src/book/book.cpp
+
+${OBJECTDIR}/src/util/price.o: src/util/price.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/util
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/util/price.o src/util/price.cpp
 
 # Subprojects
 .build-subprojects:
