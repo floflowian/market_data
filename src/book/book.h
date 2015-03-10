@@ -11,27 +11,30 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-enum Side{
-        BID,ASK
-    };
-class BookLevel{
+enum Side {
+    BID, ASK
+};
+
+class BookLevel {
     price_t price;
     uint32_t quantity;
     uint32_t nbOrders;
-    
+
 public:
-    
-    BookLevel():quantity(0),nbOrders(0){
+
+    BookLevel() : quantity(0), nbOrders(0) {
         price.setExponent(0);
         price.setMantissa(0);
-        
+
     }
-    BookLevel(price_t m_price,uint32_t m_quantity,uint32_t m_nbOrders){
-        price=m_price;
-        quantity=m_quantity;
+
+    BookLevel(price_t m_price, uint32_t m_quantity, uint32_t m_nbOrders) {
+        price = m_price;
+        quantity = m_quantity;
         nbOrders = m_nbOrders;
-        
+
     }
+
     uint32_t GetNbOrders() const {
         return nbOrders;
     }
@@ -57,33 +60,37 @@ public:
     }
 };
 
-class BookSide{
-    
+class BookSide {
     BookLevel * levels;
     uint32_t maxDepth;
     uint32_t depth;
     Side side;
-    
-    
-    
+
 public:
-    BookSide(uint32_t m_maxDepth,Side m_side):depth(0),maxDepth(m_maxDepth){
-        side=m_side;
-        levels = (BookLevel*) malloc(maxDepth*sizeof(BookLevel));
-        for(int i=0;i<maxDepth;++i){
+
+    BookSide(uint32_t m_maxDepth, Side m_side) : depth(0), maxDepth(m_maxDepth) {
+        side = m_side;
+        levels = (BookLevel*) malloc(maxDepth * sizeof (BookLevel));
+        for (int i = 0; i < maxDepth; ++i) {
             BookLevel level;
-            levels[i]=level;
+            levels[i] = level;
         }
     }
-    ~BookSide(){
+
+    ~BookSide() {
         free(levels);
     }
+
     uint32_t GetDepth() const {
         return depth;
     }
 
     void SetDepth(uint32_t depth) {
         this->depth = depth;
+    }
+
+    BookLevel GetLevel(uint32_t level) const {
+        return levels[level];
     }
 
     BookLevel* GetLevels() const {
@@ -101,32 +108,64 @@ public:
     void SetMaxDepth(uint32_t maxDepth) {
         this->maxDepth = maxDepth;
     }
-    
-    BookLevel getTopLevel(){
+
+    BookLevel getTopLevel() {
         return this->levels[0];
     }
-    
-    BookLevel getBottomLevel(){
+
+    BookLevel getBottomLevel() {
         return this->levels[depth];
     }
-    Side getSide(){
+
+    Side getSide() {
         return this->side;
     }
-    std::string getSideString(){
-        std::string ask="ASK";
-        std::string bid="BID";
-        if(this->side == ASK)
+
+    std::string getSideString() {
+        std::string ask = "ASK";
+        std::string bid = "BID";
+        if (this->side == ASK)
             return ask;
         else
             return bid;
     }
     void display();
-    void insert(price_t m_price, uint32_t m_quantity,uint32_t m_nbOrders);
-    void change( uint32_t m_quantity, uint32_t m_nbOrders);
-    void overlay( price_t m_price,uint32_t m_quantity, uint32_t m_nbOrders);
+    void insert(price_t m_price, uint32_t m_quantity, uint32_t m_nbOrders);
+    void change(uint32_t levelIndex, uint32_t m_quantity, uint32_t m_nbOrders);
+    void overlay(uint32_t levelIndex, price_t m_price, uint32_t m_quantity, uint32_t m_nbOrders);
     void remove(uint32_t levelIndex);
     void removeAll();
-    
+};
+
+class dynamic_order_book {
+private:
+    BookSide bidSide;
+    BookSide askSide;
+
+public:
+
+    dynamic_order_book(uint32_t m_maxDepth) {
+        askSide = BookSide(m_maxDepth, Side::ASK);
+        bidSide = BookSide(m_maxDepth, Side::BID);
+    }
+
+    BookSide GetAskSide() const {
+        return askSide;
+    }
+
+    void SetAskSide(BookSide askSide) {
+        this->askSide = askSide;
+    }
+
+    BookSide GetBidSide() const {
+        return bidSide;
+    }
+
+    void SetBidSide(BookSide bidSide) {
+        this->bidSide = bidSide;
+    }
+
+
 };
 
 

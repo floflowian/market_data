@@ -36,6 +36,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/src/book/book.o \
+	${OBJECTDIR}/src/publisher/md_publisher.o \
+	${OBJECTDIR}/src/publisher/md_tick.o \
 	${OBJECTDIR}/src/util/price.o
 
 
@@ -68,12 +70,22 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libmartket_data_lib.a: ${OBJECTFILES}
 ${OBJECTDIR}/src/book/book.o: src/book/book.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/book
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/book/book.o src/book/book.cpp
+	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/book/book.o src/book/book.cpp
+
+${OBJECTDIR}/src/publisher/md_publisher.o: src/publisher/md_publisher.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/publisher
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/publisher/md_publisher.o src/publisher/md_publisher.cpp
+
+${OBJECTDIR}/src/publisher/md_tick.o: src/publisher/md_tick.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/publisher
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/publisher/md_tick.o src/publisher/md_tick.cpp
 
 ${OBJECTDIR}/src/util/price.o: src/util/price.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/util
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/util/price.o src/util/price.cpp
+	$(COMPILE.cc) -O2 -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/util/price.o src/util/price.cpp
 
 # Subprojects
 .build-subprojects:
